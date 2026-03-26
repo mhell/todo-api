@@ -3,6 +3,7 @@ package se.lexicon.todo_app.exception;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -44,6 +45,13 @@ public class MyExceptionHandler {
                 .map(violation -> violation.getMessage())
                 .toArray(String[]::new);
         return createErrorResponse(HttpStatus.BAD_REQUEST, violations);
+    }
+
+    // Handle media type not supported
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex) {
+        System.out.println("HandleHttpMediaTypeNotSupported: " + ex.getMessage());
+        return createErrorResponse(HttpStatus.UNSUPPORTED_MEDIA_TYPE, ex.getMessage());
     }
 
     // Handle runtime exceptions
