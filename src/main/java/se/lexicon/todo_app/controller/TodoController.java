@@ -134,7 +134,7 @@ public class TodoController {
 
 
     private List<AttachmentDto> convertFilesToAttachments(MultipartFile[] files) {
-        if (files == null) return new ArrayList<>();
+        if (files == null) return null;
 
         List<AttachmentDto> attachments = new ArrayList<>();
         for (MultipartFile file : files) {

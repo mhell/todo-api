@@ -76,8 +76,8 @@ public class DataInitializer {
                 Todo savedTodo3 = todoRepo.save(todo3);
                 System.out.println("savedTodo3 created with title: " + savedTodo3.getTitle());
 
-                Todo todo4 = new Todo("Profit",
-                        "Lean back and await the money",
+                Todo todo4 = new Todo("Post-deployment Support",
+                        " Fix bugs and plan feature enhancements",
                         false);
                 todo4.setPerson(savedUser3);
                 Todo savedTodo4 = todoRepo.save(todo4);
