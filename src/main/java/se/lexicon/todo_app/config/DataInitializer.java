@@ -49,6 +49,7 @@ public class DataInitializer {
                 Person person3 = new Person("Mattias Hellman", "mattias@test.se");
                 User user3 = new User("user3", passwordEncoder.encode("password"));
                 user3.addRole(Role.USER);
+                user3.addRole(Role.ADMIN);
                 person3.setUser(user3);
                 Person savedUser3 = personRepo.save(person3);
                 System.out.println("User3 created with username: " + savedUser3.getUser().getUsername());
