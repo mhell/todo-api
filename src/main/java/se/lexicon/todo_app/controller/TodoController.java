@@ -81,7 +81,6 @@ public class TodoController {
         return todoService.create(todoDto);
     }
 
-
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Update todo", description = "Updates an existing todo item with optional attachments (max 5 files, 2MB each)")
     @ApiResponses({
@@ -100,16 +99,21 @@ public class TodoController {
             @Parameter(description = "Updated todo details")
             @RequestPart("todo") @Valid TodoDto todoDto,
             @Parameter(description = "File attachments (max 5 files, 2MB each)")
-            @RequestPart(value = "files", required = false) MultipartFile[] files) {
+            @RequestPart(value = "files", required = false) MultipartFile[] files,
+            @Parameter(description = "If the files should be cleared")
+            @RequestParam(value = "clearFiles", required = false, defaultValue = "false") boolean clearFiles) {
 
-        validateFiles(files);
-        List<AttachmentDto> attachments = convertFilesToAttachments(files);
+        List<AttachmentDto> attachments = null;
+        if (clearFiles) {
+            attachments = new ArrayList<>();
+        } else {
+            validateFiles(files);
+            attachments = convertFilesToAttachments(files);
+        }
+
         todoDto = todoDto.withAttachments(attachments);
         return todoService.update(id, todoDto);
     }
-
-
-
 
     private void validateFiles(MultipartFile[] files) {
         if (files == null) return;
@@ -117,7 +121,6 @@ public class TodoController {
         if (files.length > 5) {
             throw new IllegalArgumentException("Maximum 5 files allowed");
         }
-
 
         for (MultipartFile file : files) {
             if (file.isEmpty()) {
@@ -131,7 +134,6 @@ public class TodoController {
             System.out.println("file = " + file);
         }
     }
-
 
     private List<AttachmentDto> convertFilesToAttachments(MultipartFile[] files) {
         if (files == null) return null;
@@ -151,9 +153,6 @@ public class TodoController {
         }
         return attachments;
     }
-
-
-
 
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete todo", description = "Deletes a todo item")
