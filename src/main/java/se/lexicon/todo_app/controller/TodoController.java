@@ -22,7 +22,6 @@ import se.lexicon.todo_app.service.TodoService;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -99,12 +98,10 @@ public class TodoController {
             @Parameter(description = "Updated todo details")
             @RequestPart("todo") @Valid TodoDto todoDto,
             @Parameter(description = "File attachments (max 5 files, 2MB each)")
-            @RequestPart(value = "files", required = false) MultipartFile[] files,
-            @Parameter(description = "If the files should be cleared")
-            @RequestParam(value = "clearFiles", required = false, defaultValue = "false") boolean clearFiles) {
+            @RequestPart(value = "files", required = false) MultipartFile[] files) {
 
-        List<AttachmentDto> attachments = null;
-        if (clearFiles) {
+        List<AttachmentDto> attachments;
+        if (todoDto.numberOfAttachments() == 0) {
             attachments = new ArrayList<>();
         } else {
             validateFiles(files);
