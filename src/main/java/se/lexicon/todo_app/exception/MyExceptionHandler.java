@@ -1,6 +1,7 @@
 package se.lexicon.todo_app.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -59,6 +60,13 @@ public class MyExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         System.out.println("HandleRuntimeException: " + ex.getMessage());
         return createErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    // Handle DataIntegrityViolationException
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        System.out.println("handleDataIntegrityViolationException: " + ex.getMessage());
+        return createErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     // Handle generic exceptions
