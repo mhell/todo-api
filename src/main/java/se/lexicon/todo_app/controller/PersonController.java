@@ -1,5 +1,7 @@
 package se.lexicon.todo_app.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
@@ -78,6 +80,15 @@ public class PersonController {
     public void deletePerson(@PathVariable @NotNull(message = "Id cannot be null") Long id) {
         System.out.println("Deleting person with ID: " + id);
         personService.delete(id);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/count")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Get number of persons", description = "Retrieves the number of registered persons")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved person count")
+    public Long getCount() {
+        return personService.getCount();
     }
 
 }

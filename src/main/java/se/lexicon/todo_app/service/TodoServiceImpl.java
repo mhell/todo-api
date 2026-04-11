@@ -1,9 +1,11 @@
 package se.lexicon.todo_app.service;
 
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.lexicon.todo_app.dto.AttachmentDto;
 import se.lexicon.todo_app.dto.TodoDto;
+import se.lexicon.todo_app.dto.TodoStatsDto;
 import se.lexicon.todo_app.entity.Attachment;
 import se.lexicon.todo_app.entity.Person;
 import se.lexicon.todo_app.entity.Todo;
@@ -164,5 +166,17 @@ public class TodoServiceImpl implements TodoService {
         return todoRepository.findByDueDateBeforeAndCompletedFalse(LocalDateTime.now()).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TodoDto> findLatestTodos(int limit) {
+        return todoRepository.findByOrderByCreatedAtDesc(Limit.of(limit)).stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
+    @Override
+    public TodoStatsDto fetchStats() {
+        return todoRepository.fetchStats();
     }
 }

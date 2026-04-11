@@ -104,6 +104,11 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public Long getCount() {
+        return personRepository.count();
+    }
+
+    @Override
     public void updatePassword(Long id, String newPassword) {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Person not found"));

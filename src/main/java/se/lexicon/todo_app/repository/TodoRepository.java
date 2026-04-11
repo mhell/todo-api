@@ -1,7 +1,10 @@
 package se.lexicon.todo_app.repository;
 
+import org.springframework.data.domain.Limit;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import se.lexicon.todo_app.dto.TodoStatsDto;
 import se.lexicon.todo_app.entity.Todo;
 
 import java.time.LocalDateTime;
@@ -43,4 +46,24 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     // 📌 Count all tasks assigned to a person
     long countByPersonId(Long personId);
+
+    // Find all ordered by creation date, limit by 'limit'
+    List<Todo> findByOrderByCreatedAtDesc(Limit limit);
+
+    // Find number of completed, pending, overdue and in progress
+    @Query("""
+    SELECT new se.lexicon.todo_app.dto.TodoStatsDto(
+        SUM(CASE WHEN t.completed = true THEN 1 ELSE 0 END),
+        SUM(CASE WHEN t.completed = false AND t.dueDate IS NULL THEN 1 ELSE 0 END),
+        SUM(CASE WHEN t.completed = false AND t.dueDate < CURRENT_TIMESTAMP THEN 1 ELSE 0 END),
+        SUM(CASE
+            WHEN t.completed = false
+            AND t.dueDate IS NOT NULL
+            AND t.dueDate >= CURRENT_TIMESTAMP 
+            THEN 1 ELSE 0 END
+        )
+    )
+    FROM Todo t
+    """)
+    TodoStatsDto fetchStats();
 }

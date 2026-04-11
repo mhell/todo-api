@@ -1,6 +1,8 @@
 package se.lexicon.todo_app.service;
 
 import se.lexicon.todo_app.dto.TodoDto;
+import se.lexicon.todo_app.dto.TodoStatsDto;
+
 import java.util.List;
 
 public interface TodoService {
@@ -19,4 +21,8 @@ public interface TodoService {
     List<TodoDto> findByCompleted(boolean completed);
     
     List<TodoDto> findOverdueTodos();
+
+    List<TodoDto> findLatestTodos(int limit);
+
+    TodoStatsDto fetchStats();
 }

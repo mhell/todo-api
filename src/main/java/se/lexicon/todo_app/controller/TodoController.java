@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import se.lexicon.todo_app.dto.AttachmentDto;
 import se.lexicon.todo_app.dto.TodoDto;
+import se.lexicon.todo_app.dto.TodoStatsDto;
 import se.lexicon.todo_app.service.TodoService;
 
 import java.io.IOException;
@@ -194,5 +195,25 @@ public class TodoController {
     @ResponseStatus(HttpStatus.OK)
     public List<TodoDto> getOverdueTodos() {
         return todoService.findOverdueTodos();
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Get latest todos", description = "Retrieves the latest todo items")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved latest todos")
+    @GetMapping("/latest")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TodoDto> getOverdueTodos(
+            @Parameter(description = "Number of todos to retrieve")
+            @RequestParam(defaultValue = "5") int limit) {
+        return todoService.findLatestTodos(limit);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get todos statistics", description = "Retrieves statistics of todo items")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved todo statistics")
+    @GetMapping("/stats")
+    @ResponseStatus(HttpStatus.OK)
+    public TodoStatsDto getStats() {
+        return todoService.fetchStats();
     }
 }
