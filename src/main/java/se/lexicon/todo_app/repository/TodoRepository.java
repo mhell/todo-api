@@ -50,7 +50,10 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     // Find all ordered by creation date, limit by 'limit'
     List<Todo> findByOrderByCreatedAtDesc(Limit limit);
 
-    // Find number of completed, pending, overdue and in progress
+    // Find all upcoming todos ordered by due date, limit by 'limit'
+    List<Todo> findByCompletedFalseAndDueDateIsNotNullAndDueDateAfterOrderByDueDateAsc(LocalDateTime dateTime, Limit limit);
+
+    // Find number of completed, pending, overdue and in progress todos
     @Query("""
     SELECT new se.lexicon.todo_app.dto.TodoStatsDto(
         SUM(CASE WHEN t.completed = true THEN 1 ELSE 0 END),
@@ -59,7 +62,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
         SUM(CASE
             WHEN t.completed = false
             AND t.dueDate IS NOT NULL
-            AND t.dueDate >= CURRENT_TIMESTAMP 
+            AND t.dueDate >= CURRENT_TIMESTAMP
             THEN 1 ELSE 0 END
         )
     )

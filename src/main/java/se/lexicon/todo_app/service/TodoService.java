@@ -24,5 +24,7 @@ public interface TodoService {
 
     List<TodoDto> findLatestTodos(int limit);
 
+    List<TodoDto> findUpcomingTodos(int limit);
+
     TodoStatsDto fetchStats();
 }

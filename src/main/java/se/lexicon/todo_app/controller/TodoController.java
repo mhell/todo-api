@@ -202,10 +202,21 @@ public class TodoController {
     @ApiResponse(responseCode = "200", description = "Successfully retrieved latest todos")
     @GetMapping("/latest")
     @ResponseStatus(HttpStatus.OK)
-    public List<TodoDto> getOverdueTodos(
+    public List<TodoDto> getLatestTodos(
             @Parameter(description = "Number of todos to retrieve")
             @RequestParam(defaultValue = "5") int limit) {
         return todoService.findLatestTodos(limit);
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Get upcoming todos", description = "Retrieves the todo items with upcoming due dates")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved upcoming todos")
+    @GetMapping("/upcoming")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TodoDto> getUpcomingTodos(
+            @Parameter(description = "Number of todos to retrieve")
+            @RequestParam(defaultValue = "5") int limit) {
+        return todoService.findUpcomingTodos(limit);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

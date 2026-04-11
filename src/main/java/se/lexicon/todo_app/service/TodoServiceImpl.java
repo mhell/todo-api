@@ -176,6 +176,14 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
+    public List<TodoDto> findUpcomingTodos(int limit) {
+        return todoRepository.findByCompletedFalseAndDueDateIsNotNullAndDueDateAfterOrderByDueDateAsc(
+                LocalDateTime.now(), Limit.of(limit)).stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
+    @Override
     public TodoStatsDto fetchStats() {
         return todoRepository.fetchStats();
     }
