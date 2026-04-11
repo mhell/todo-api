@@ -20,8 +20,6 @@ public interface PersonService {
 
     PersonDto findByEmail(String email);
 
-    Long getCount();
-
 
     void updatePassword(Long id, String newPassword);
 
