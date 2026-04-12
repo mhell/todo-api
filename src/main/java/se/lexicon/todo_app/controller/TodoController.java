@@ -198,25 +198,14 @@ public class TodoController {
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @Operation(summary = "Get latest todos", description = "Retrieves the latest todo items")
-    @ApiResponse(responseCode = "200", description = "Successfully retrieved latest todos")
-    @GetMapping("/latest")
+    @Operation(summary = "Get recent todos", description = "Retrieves the recent todo items")
+    @ApiResponse(responseCode = "200", description = "Successfully retrieved recent todos")
+    @GetMapping("/recent")
     @ResponseStatus(HttpStatus.OK)
-    public List<TodoDto> getLatestTodos(
+    public List<TodoDto> getRecentTodos(
             @Parameter(description = "Number of todos to retrieve")
-            @RequestParam(defaultValue = "5") int limit) {
-        return todoService.findLatestTodos(limit);
-    }
-
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @Operation(summary = "Get upcoming todos", description = "Retrieves the todo items with upcoming due dates")
-    @ApiResponse(responseCode = "200", description = "Successfully retrieved upcoming todos")
-    @GetMapping("/upcoming")
-    @ResponseStatus(HttpStatus.OK)
-    public List<TodoDto> getUpcomingTodos(
-            @Parameter(description = "Number of todos to retrieve")
-            @RequestParam(defaultValue = "5") int limit) {
-        return todoService.findUpcomingTodos(limit);
+            @RequestParam(defaultValue = "10") int limit) {
+        return todoService.findRecentTodos(limit);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

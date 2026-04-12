@@ -169,15 +169,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<TodoDto> findLatestTodos(int limit) {
-        return todoRepository.findByOrderByCreatedAtDesc(Limit.of(limit)).stream()
-                .map(this::convertToDto)
-                .toList();
-    }
-
-    @Override
-    public List<TodoDto> findUpcomingTodos(int limit) {
-        return todoRepository.findByCompletedFalseAndDueDateIsNotNullAndDueDateAfterOrderByDueDateAsc(
+    public List<TodoDto> findRecentTodos(int limit) {
+        return todoRepository.findByDueDateAfterOrderByCreatedAtDesc(
                 LocalDateTime.now(), Limit.of(limit)).stream()
                 .map(this::convertToDto)
                 .toList();

@@ -22,9 +22,7 @@ public interface TodoService {
     
     List<TodoDto> findOverdueTodos();
 
-    List<TodoDto> findLatestTodos(int limit);
-
-    List<TodoDto> findUpcomingTodos(int limit);
+    List<TodoDto> findRecentTodos(int limit);
 
     TodoStatsDto fetchStats();
 }

@@ -47,11 +47,8 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     // 📌 Count all tasks assigned to a person
     long countByPersonId(Long personId);
 
-    // Find all ordered by creation date, limit by 'limit'
-    List<Todo> findByOrderByCreatedAtDesc(Limit limit);
-
     // Find all upcoming todos ordered by due date, limit by 'limit'
-    List<Todo> findByCompletedFalseAndDueDateIsNotNullAndDueDateAfterOrderByDueDateAsc(LocalDateTime dateTime, Limit limit);
+    List<Todo> findByDueDateAfterOrderByCreatedAtDesc(LocalDateTime dateTime, Limit limit);
 
     // Find number of completed, pending, overdue and in progress todos
     @Query("""
